@@ -26,5 +26,5 @@ describe("Gameboard", () => {
     expect(gameboard.setShip("Destroyer", 0, 0))
   })
 
-  test('')
+  
 });
