@@ -11,6 +11,17 @@ export class Gameboard {
     checkError(x, y);
     const ship = new Ship(name, x, y);
     this.ships.push(ship);
+    this.putShip(ship)
+  }
+
+  putShip(ship) {
+    let x = ship.x;
+    let y = ship.y;
+    const len = ship.length;
+    for (let i = 0; i < len; i++) {
+      this.board[x][y] = 'S';
+      y++;
+    }
   }
 
   receiveAttack(x, y) {
@@ -45,6 +56,10 @@ const checkError = (x, y) => {
 };
 
 const randomizer = () => {
-  const random = Math.floor(Math.random() * 2);
-  return random;
-};
+    const random = Math.floor(Math.random() * 2);
+    return random;
+}
+
+const createCoord = (x, y, len) => {
+  
+}
