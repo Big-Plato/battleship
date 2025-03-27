@@ -2,23 +2,24 @@ export default class Ship {
   #shipType(name) {
     switch (name) {
       case "Carrier":
-        return this.length = 5;
+        return (this.length = 5);
       case "Battleship":
-        return this.length = 4;
+        return (this.length = 4);
       case "Destroyer":
-        return this.length = 3;
+        return (this.length = 3);
       case "Submarine":
-        return this.length = 2
+        return (this.length = 2);
     }
   }
 
-  constructor(name, x, y) {
+  constructor(name, x, y, direction) {
     this.name = name;
     this.numberOfHits = 0;
     this.sunk = false;
     this.x = x;
     this.y = y;
     this.length = this.#shipType(name);
+    this.direction = direction;
   }
 
   numberOfHits() {
