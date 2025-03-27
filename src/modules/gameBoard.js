@@ -7,21 +7,12 @@ export class Gameboard {
     this.ships = [];
   }
 
-  setShip(name, x, y) {
+  setShip(name, x, y, direction) {
     checkError(x, y);
-    const ship = new Ship(name, x, y);
+    const ship = new Ship(name, x, y, direction);
+    const moves = checkCoord(this.board, ship);
+    ship.moves = moves;
     this.ships.push(ship);
-    this.putShip(ship)
-  }
-
-  putShip(ship) {
-    let x = ship.x;
-    let y = ship.y;
-    const len = ship.length;
-    for (let i = 0; i < len; i++) {
-      this.board[x][y] = 'S';
-      y++;
-    }
   }
 
   receiveAttack(x, y) {
@@ -55,11 +46,67 @@ const checkError = (x, y) => {
   }
 };
 
-const randomizer = () => {
-    const random = Math.floor(Math.random() * 2);
-    return random;
-}
+const checkCoord = (board, ship) => {
+  // Coisas que precisam ser feitas:
+  // Checar se os espaços ao redor são vazios
+  let x = ship.x;
+  let y = ship.y;
+  const len = ship.length;
+  const direction = ship.direction;
+  let i = 0;
+  const moves = [];
 
-const createCoord = (x, y, len) => {
+  const checkEmpty = (moves) => {
+    const possibleMoves = [
+      [x - 1, y - 1],
+      [x, y - 1],
+      [x + 1, y - 1],
   
-}
+      [x - 1, y],
+      [x + 1, y],
+  
+      [x - 1, y + len],
+      [x, y + len],
+      [x + 1, y + len]
+    ]
+  }
+
+  if (direction == "Horizontal") {
+    if (y - len < 0) {
+      while (i < len) {
+        board[x][y] = "S";
+        moves.push([x, y]);
+        y++;
+        i++;
+      }
+    } else {
+      while (i < len) {
+        board[x][y] = "S";
+        moves.push([x, y]);
+        y--;
+        i++;
+      }
+    }
+  }
+
+  if (direction == "Vertical") {
+    if (x - len < 0) {
+      while (i < len) {
+        board[x][y] = "S";
+        moves.push([x, y]);
+        x++;
+        i++;
+      }
+    } else {
+      while (i < len) {
+        board[x][y] = "S";
+        moves.push([x, y]);
+        x--;
+        i++;
+      }
+    }
+  }
+  console.log(moves)
+  return moves;
+};
+
