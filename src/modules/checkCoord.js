@@ -1,78 +1,45 @@
 import { collision } from "./collision.js";
 
 export const checkCoord = (board, ship) => {
-  let x = ship.x;
-  let y = ship.y;
-  const len = ship.length;
-  const direction = ship.direction;
-  let i = 0;
+  const { x, y, length, direction } = ship;
   const moves = [];
+  const occupiedCells = [];
 
-  const possibleMoves = [
-    [x - 1, y - 1],
-    [x, y - 1],
-    [x + 1, y - 1],
-
-    [x - 1, y],
-    [x + 1, y],
-
-    [x - 1, y + len],
-    [x, y + len],
-    [x + 1, y + len],
-  ];
-
-  for (let i = 0; i < possibleMoves.length; i++) {
-    const x = possibleMoves[i][0];
-    const y = possibleMoves[i][1];
-
-    if (board[x] == -1 || board[y] == -1) {
-        break;
-    }
-
-    if (board[x][y] == 'S' || board[x][y] == 'A')  {
-        throw new Error("There's a ship around. Invalid place!");
-    } 
+  // Generate all cells of the ship
+  const shipCells = [];
+  for (let i = 0 ; i < length; i++) {
+        shipCells.push(
+            direction == "Horizontal"
+            ? [x, y + i]
+            : [x + i, y]
+        );
   }
 
-  if (direction == "Horizontal") {
-    if (y - len < 0) {
-      while (i < len) {
-        collision(board[x][y])
-        board[x][y] = "S";
-        moves.push([x, y]);
-        y++;
-        i++;
-      }
-    } else {
-      while (i < len) {
-        collision(board[x][y])
-        board[x][y] = "S";
-        moves.push([x, y]);
-        y--;
-        i++;
-      }
+  // Check cells and his adjacents
+  for (const [cellX, cellY] of shipCells) {
+    // Check limits of the board
+    if (cellX < 0 || cellX >= 10 || cellY < 0 || cellY >= 10) {
+        throw new Error("Ship is outside the board");
     }
+
+    // Check main cell and adjacents
+    for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+            const adjX = cellX + dx;
+            const adjY = cellY + dy;
+            if (adjX >= 0 && adjX < 10 && adjY >= 0 && adjY < 10) {
+               collision(board[adjX][adjY]);
+            }
+        }
+    }
+    occupiedCells.push([cellX, cellY]);
   }
 
-  if (direction == "Vertical") {
-    if (x - len < 0) {
-      while (i < len) {
-        collision(board[x][y])
-        board[x][y] = "S";
-        moves.push([x, y]);
-        x++;
-        i++;
-      }
-    } else {
-      while (i < len) {
-        collision(board[x][y])
-        board[x][y] = "S";
-        moves.push([x, y]);
-        x--;
-        i++;
-      }
-    }
+  // Mark occupied cells
+  for (const [cellX, cellY] of occupiedCells) {
+    board[cellX][cellY] = "S";
+    moves.push([cellX, cellY]);
   }
-  console.log(moves);
+
   return moves;
 };
