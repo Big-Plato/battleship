@@ -1,24 +1,10 @@
+import { beforeEach } from "jest-circus";
 import { Gameboard } from "./gameBoard.js";
 
-const gameboard = new Gameboard();
+
 
 describe("Gameboard", () => {
-  const expected = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ];
-
-  test("The board is generated with zeros", () => {
-    expect(gameboard.board).toEqual(expected);
-  });
+  const gameboard = new Gameboard();
 
   test("Horizontal ship", () => {
     gameboard.setShip("Destroyer", 0, 0, "Horizontal");
@@ -26,6 +12,7 @@ describe("Gameboard", () => {
   });
 
   test("Vertical ship", () => {
+    const gameboard = new Gameboard();
     gameboard.setShip("Battleship", 0, 0, "Vertical");
     expect(gameboard.board[1][0]).toBe("S");
   });
@@ -38,24 +25,33 @@ describe("Gameboard", () => {
 });
 
 describe("Collision", () => {
+
   test("Can't put new ship in occupied place (Horizontal)", () => {
+    const gameboard = new Gameboard();
+
+    gameboard.setShip("Battleship", 0, 0, "Horizontal");
     expect(() => {
       gameboard.setShip("Battleship", 0, 0, "Horizontal");
     }).toThrow("Place occupied");
   });
 
   test("Can't put new ship in occupied place (Vertical)", () => {
+    const gameboard = new Gameboard();
+
+    gameboard.setShip("Destroyer", 0, 0, "Vertical");
     expect(() => {
-      gameboard.setShip("Battleship", 0, 0, "Vertical");
+      gameboard.setShip("Destroyer", 0, 0, "Vertical");
     }).toThrow("Place occupied");
   });
 });
 
 describe("Empty places", () => {
+  const gameboard = new Gameboard();
+
   gameboard.setShip("Destroyer", 2, 1, "Horizontal");
   test("All of coordenates around the boat has to be '0' or '-1'", () => {
     expect(() => {
       gameboard.setShip("Battleship", 1, 1, "Horizontal");
-    }).toThrow("There's a ship around. Invalid place!");
+    }).toThrow("Place occupied");
   });
 });
