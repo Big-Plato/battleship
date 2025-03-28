@@ -1,4 +1,5 @@
 import Ship from "./ship.js";
+import { checkCoord } from "./checkCoord.js";
 
 export class Gameboard {
   constructor() {
@@ -40,73 +41,8 @@ class Board {
   }
 }
 
-const checkError = (x, y) => {
+export const checkError = (x, y) => {
   if (x > 9 || x < 0 || y > 9 || y < 0) {
     throw new Error("Invalid move!");
   }
 };
-
-const checkCoord = (board, ship) => {
-  // Coisas que precisam ser feitas:
-  // Checar se os espaços ao redor são vazios
-  let x = ship.x;
-  let y = ship.y;
-  const len = ship.length;
-  const direction = ship.direction;
-  let i = 0;
-  const moves = [];
-
-  const checkEmpty = (moves) => {
-    const possibleMoves = [
-      [x - 1, y - 1],
-      [x, y - 1],
-      [x + 1, y - 1],
-  
-      [x - 1, y],
-      [x + 1, y],
-  
-      [x - 1, y + len],
-      [x, y + len],
-      [x + 1, y + len]
-    ]
-  }
-
-  if (direction == "Horizontal") {
-    if (y - len < 0) {
-      while (i < len) {
-        board[x][y] = "S";
-        moves.push([x, y]);
-        y++;
-        i++;
-      }
-    } else {
-      while (i < len) {
-        board[x][y] = "S";
-        moves.push([x, y]);
-        y--;
-        i++;
-      }
-    }
-  }
-
-  if (direction == "Vertical") {
-    if (x - len < 0) {
-      while (i < len) {
-        board[x][y] = "S";
-        moves.push([x, y]);
-        x++;
-        i++;
-      }
-    } else {
-      while (i < len) {
-        board[x][y] = "S";
-        moves.push([x, y]);
-        x--;
-        i++;
-      }
-    }
-  }
-  console.log(moves)
-  return moves;
-};
-
