@@ -40,6 +40,5 @@ export const checkCoord = (board, ship) => {
     board[cellX][cellY] = "S";
     moves.push([cellX, cellY]);
   }
-
   return moves;
 };
