@@ -1,8 +1,6 @@
 import { beforeEach } from "jest-circus";
 import { Gameboard } from "./gameBoard.js";
 
-
-
 describe("Gameboard", () => {
   const gameboard = new Gameboard();
 
@@ -25,7 +23,6 @@ describe("Gameboard", () => {
 });
 
 describe("Collision", () => {
-
   test("Can't put new ship in occupied place (Horizontal)", () => {
     const gameboard = new Gameboard();
 
