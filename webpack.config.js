@@ -1,8 +1,11 @@
 /* eslint-disable no-undef */
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+import path from "path";
+import { fileURLToPath } from "url";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 
-module.exports = {
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const config = {
   mode: "development",
   entry: "./src/index.js",
   output: {
@@ -43,15 +46,15 @@ module.exports = {
         test: /\.(?:js|mjs|cjs)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
             targets: "defaults",
-            presets: [
-              ['@babel/preset-env']
-            ]
-          }
-        }
-      }
+            presets: [["@babel/preset-env"]],
+          },
+        },
+      },
     ],
   },
 };
+
+export default config;
