@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@100..900&display=swap');
+
+:root {
+  --bg-color:rgb(180, 235, 230);
+  --main-font: monospace;
+  --bg-table: rgb(128, 203, 196);
+  --text-color: rgb(251, 248, 239);
+  --text-other: rgb(255, 180, 51);
+}
+
+body {
+  margin: 0;
+  border: 0;
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 50px 3fr 1fr;
+  place-items: center;
+  background-color: var(--text-other);
+}
+
+h1 {
+    font-family: 'Grenze Gotisch';
+    text-align: center;
+    font-size: 3rem;
+    color: var(--text-color);
+    -webkit-text-stroke: 1px black;
+}
+
+main {
+    background-color: var(--text-other);
+    height: 100%;
+    width: 90%;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-evenly;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.board {
+    background-color: var(--bg-table);
+    height: 70%;
+    width: 300px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+}
+
+.board-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cell {
+    width: auto;
+    background-color: var(--bg-table);
+    height: auto;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+#info {
+  font-family: var(--text-color);
+  font-size: 1.5rem;
+  color: var(--text-color);
+}
+
+/* 
+Ship color
+*/
+
+.destroyer {
+  background-color: green;
+}
+
+.battleship {
+  background-color: brown;
+}
+
+.carrier {
+  background-color: slateblue;
+}
+
+.submarine {
+  background-color: yellow;
+}
