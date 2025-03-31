@@ -1,11 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@100..900&family=Nova+Square&display=swap");
 
 :root {
-  --bg-color:rgb(180, 235, 230);
-  --main-font: monospace;
-  --bg-table: rgb(128, 203, 196);
-  --text-color: rgb(251, 248, 239);
-  --text-other: rgb(255, 180, 51);
+  --main-color: rgb(0, 0, 0);
+  --sec-color: rgb(32, 209, 43);
+  --main-font: "Nova Square", sans-serif;
 }
 
 body {
@@ -15,50 +13,88 @@ body {
   width: 100vw;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 50px 3fr 1fr;
+  grid-template-rows: 1fr 50px 3fr 50px 1fr;
   place-items: center;
-  background-color: var(--text-other);
+  background-color: var(--main-color);
 }
 
 h1 {
-    font-family: 'Grenze Gotisch';
-    text-align: center;
-    font-size: 3rem;
-    color: var(--text-color);
-    -webkit-text-stroke: 1px black;
+  text-align: center;
+  font-family: var(--main-font);
+  font-weight: 100;
+  font-size: 3rem;
+  color: var(--sec-color);
+  -webkit-text-stroke: 1px black;
+}
+
+#start-btn {
+  background-color: var(--sec-color);
+  color: var(--main-color);
+  font-family: var(--main-font);
+  font-size: x-large;
+  height: 50px;
+  width: 300px;
+  cursor: pointer;
+}
+
+#start-btn:hover {
+  background-color: var(--sec-color);
+  animation-name: tic;
+  animation-duration: 0.3s;
+  animation-timing-function: 1;
+  transform: scale(1.02);
+}
+
+@keyframes tic {
+  0% {
+    background-color: rgb(40, 155, 47);
+  }
+
+  20% {
+    background-color: rgb(26, 95, 30);
+  }
+
+  100% {
+    background-color: var(--sec-color);
+  }
+}
+
+#start-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 5 px #666;
 }
 
 main {
-    background-color: var(--text-other);
-    height: 100%;
-    width: 90%;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-evenly;
-    font-family: 'Courier New', Courier, monospace;
+  background-color: var(--text-other);
+  height: 100%;
+  width: 90%;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-evenly;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .board {
-    background-color: var(--bg-table);
-    height: 70%;
-    width: 300px;
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(10, 1fr);
+  background-color: var(--bg-table);
+  height: 70%;
+  width: 300px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
 }
 
 .board-div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .cell {
-    width: auto;
-    background-color: var(--bg-table);
-    height: auto;
-    border: 1px solid black;
-    cursor: pointer;
+  width: auto;
+  background-color: var(--main-color);
+  height: auto;
+  border: 1px solid var(--sec-color);
+  cursor: pointer;
 }
 
 #info {
@@ -71,18 +107,6 @@ main {
 Ship color
 */
 
-.destroyer {
-  background-color: green;
-}
-
-.battleship {
-  background-color: brown;
-}
-
-.carrier {
-  background-color: slateblue;
-}
-
-.submarine {
-  background-color: yellow;
+.ship {
+  background-color: var(--sec-color);
 }
