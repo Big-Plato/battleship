@@ -1,5 +1,11 @@
 import { Real, Computer } from "./player.js";
-import { start, typeWriter, hideBoard, generateBoard, generateRandomShips } from "./domManipulation.js";
+import {
+  start,
+  typeWriter,
+  generateBoard,
+  generateRandomShips,
+  triggerGlitch,
+} from "./domManipulation.js";
 
 const divBoard = document.querySelector(".board-div");
 const pBoard = document.querySelector(".board");
@@ -11,7 +17,7 @@ const p2Board = document.querySelector("#p2-board");
 
 export const game = () => {
   start.innerHTML = "";
-  
+
   const player1 = new Real();
   const player2 = new Computer();
 
@@ -24,17 +30,19 @@ export const game = () => {
   generateBoard(p1Board, player1Board);
   generateBoard(p2Board, player2Board);
 
-  typeWriter(start, 'Begin');
+  triggerGlitch("p1-board");
+  triggerGlitch("p2-board");
 
-  hideBoard();
+  typeWriter(start, "Begin");
   playButtons();
 
   const randomBtn = document.querySelector("#random-btn");
-  typeWriter(randomBtn, 'Randomize')
+  typeWriter(randomBtn, "Randomize");
 
   randomBtn.addEventListener("click", () => {
     player1.board.eraseBoard();
     p1Board.innerHTML = "";
+    triggerGlitch("p1-board");
     generateRandomShips(player1Board);
     generateBoard(p1Board, player1Board);
   });
@@ -49,13 +57,15 @@ export const game = () => {
 };
 
 const playButtons = () => {
-    const randomizeBtn = document.createElement("button");
-    randomizeBtn.setAttribute("id", "random-btn");
-    ctrlDiv.insertBefore(randomizeBtn, start);
+  const randomizeBtn = document.createElement("button");
+  randomizeBtn.setAttribute("id", "random-btn");
+  ctrlDiv.insertBefore(randomizeBtn, start);
+};
+
+const switchTurns = (Player = "Ressens") => {
+  typeWriter(info, `${Player}'s turn`);
+};
+
+export function handleBtnClick() {
+  console.log("Clicked");
 }
-
-const switchTurns = (Player = 'Ressens') => {
-    typeWriter(info, `${Player}'s turn`)
-}
-
-
