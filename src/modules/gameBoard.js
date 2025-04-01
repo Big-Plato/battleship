@@ -20,6 +20,13 @@ export class Gameboard {
     checkError(x, y);
     this.board[x][y] === 0 ? "X" : "A";
   }
+
+  eraseBoard() {
+    const newBoard = new Board();
+    this.game = newBoard;
+    this.ships = [];
+    this.board = newBoard.board();
+  }
 }
 
 class Board {
