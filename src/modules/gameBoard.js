@@ -18,7 +18,19 @@ export class Gameboard {
 
   receiveAttack(x, y) {
     checkError(x, y);
-    this.board[x][y] === 0 ? "X" : "A";
+    this.board[x][y] = this.board[x][y] === 0 ? "X" : "A";
+    this.gameOver();
+    console.table(this.board);
+    console.table(this.ships);
+  }
+
+  gameOver() {
+    let endGame = false;
+    const lookUp = this.board.filter((x) => x.includes("S"));
+    if (lookUp.length === 0) {
+      endGame = true;
+      return endGame;
+    }
   }
 
   eraseBoard() {
