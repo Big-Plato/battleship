@@ -1,12 +1,6 @@
-// player1Board.setShip("Destroyer", 0, 0, "Horizontal");
-// player1Board.setShip("Battleship", 2, 7, "Vertical");
-// player1Board.setShip("Submarine", 4, 3, "Vertical");
-// player1Board.setShip("Carrier", 0, 9, "Vertical");
+import { game } from "./game.js";
 
-// player2Board.setShip("Submarine", 7, 0, "Vertical");
-// player2Board.setShip("Destroyer", 8, 2, "Horizontal")
-// player2Board.setShip("Battleship", 2, 4, "Vertical");
-// player2Board.setShip("Carrier", 0, 4, "Horizontal");
+const start = document.querySelector("#start-btn");
 
 const shipColor = (ship, cell) => {
   switch (ship) {
@@ -27,19 +21,17 @@ const shipColor = (ship, cell) => {
 
 const generateOccupiedCells = (player, ships) => {
   const moves = ships.moves;
-  console.log(moves);
   const joinedMoves = moves.map((x) => {
     return x.join("");
   });
 
   for (let move of joinedMoves) {
-    console.log(move);
     const cell = document.getElementById(`${player.id}-${move}`);
     shipColor(ships.name, cell);
   }
 };
 
-export const generateBoard = (player, board) => {
+const generateBoard = (player, board) => {
   const table = board.board;
   const ships = board.ships;
   for (let i = 0; i < table.length; i++) {
@@ -56,7 +48,7 @@ export const generateBoard = (player, board) => {
   }
 };
 
-export const typeWriter = (element, text, speed = 50) => {
+const typeWriter = (element, text, speed = 50) => {
   let i = 0;
   element.innerHTML = "";
   const timer = setInterval(() => {
@@ -69,7 +61,7 @@ export const typeWriter = (element, text, speed = 50) => {
   }, speed);
 };
 
-export const triggerGlitch = (pBoard) => {
+const triggerGlitch = (pBoard) => {
   const board = document.querySelector(`#${pBoard}`);
   board.style.textShadow = "0 0 5px #00ff41";
   board.style.opacity = "0.8";
@@ -78,3 +70,54 @@ export const triggerGlitch = (pBoard) => {
     board.style.opacity = "1";
   }, 100);
 };
+
+const hideBoard = () => {
+  const board = document.querySelector("#p2-board").childNodes;
+
+  for (let i = 0; i < board.length; i++) {
+    board[i].style.display = "none";
+  }  
+};
+
+const randomizer = (num) => {
+  const random = Math.floor(Math.random() * num);
+  return random;
+};
+
+const generateRandomShips = (playerBoard) => {
+  const ships = ["Destroyer", "Battleship", "Submarine", "Carrier"];
+
+  for (let i = 0; i < ships.length; i++) {
+    const shipName = ships[i];
+    let placed = false;
+    let attempts = 0;
+    const maxAttempts = 100;
+
+    const direction = i % 2 === 0 ? "Horizontal" : "Vertical";
+
+    while (!placed && attempts < maxAttempts) {
+      try {
+        playerBoard.setShip(
+          shipName,
+          randomizer(10),
+          randomizer(10),
+          direction,
+        );
+        placed = true;
+      } catch (err) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          console.error(
+            `Failed to place ${shipName} after ${maxAttempts} attempts.`,
+          );
+        }
+      }
+    }
+  }
+};
+
+typeWriter(start, 'Start');
+
+start.addEventListener("click", game);
+
+export { start, typeWriter, generateRandomShips, triggerGlitch, generateBoard, hideBoard }
