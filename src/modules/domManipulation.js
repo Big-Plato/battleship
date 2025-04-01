@@ -1,4 +1,4 @@
-import { game } from "./game.js";
+import { game, handleBtnClick } from "./game.js";
 
 const start = document.querySelector("#start-btn");
 
@@ -26,20 +26,47 @@ const generateOccupiedCells = (player, ships) => {
   });
 
   for (let move of joinedMoves) {
-    const cell = document.getElementById(`${player.id}-${move}`);
-    shipColor(ships.name, cell);
+    if (player.id === "p2-board") {
+      const cell = document.getElementById(`${player.id}-h${move}`);
+      shipColor(ships.name, cell);
+    } else {
+      const cell = document.getElementById(`${player.id}-${move}`);
+      shipColor(ships.name, cell);
+    }
   }
 };
 
 const generateBoard = (player, board) => {
   const table = board.board;
   const ships = board.ships;
+
   for (let i = 0; i < table.length; i++) {
     for (let j = 0; j < table[i].length; j++) {
+      const container = document.createElement("div");
+      container.classList.add("cell-container");
+
       const cell = document.createElement("button");
+      const hidden = document.createElement("button");
       cell.classList.add("cell");
       cell.setAttribute("id", `${player.id}-${[i] + [j]}`);
-      player.append(cell);
+      hidden.classList.add("hidden");
+      hidden.dataset.x = i;
+      hidden.dataset.y = j;
+      hidden.setAttribute("id", `${player.id}-h${[i] + [j]}`);
+
+      hidden.addEventListener("click", () => {
+        if (hidden.classList.contains("ship")) {
+          hidden.classList.add("revealed");
+          hidden.classList.add("hit");
+          board.receiveAttack(i, j);
+        } else {
+          board.receiveAttack(i, j);
+        }
+      });
+
+      container.append(hidden);
+      container.append(cell);
+      player.append(container);
     }
   }
 
@@ -68,15 +95,7 @@ const triggerGlitch = (pBoard) => {
   setTimeout(() => {
     board.style.textShadow = "none";
     board.style.opacity = "1";
-  }, 100);
-};
-
-const hideBoard = () => {
-  const board = document.querySelector("#p2-board").childNodes;
-
-  for (let i = 0; i < board.length; i++) {
-    board[i].style.display = "none";
-  }  
+  }, 400);
 };
 
 const randomizer = (num) => {
@@ -85,7 +104,7 @@ const randomizer = (num) => {
 };
 
 const generateRandomShips = (playerBoard) => {
-  const ships = ["Destroyer", "Battleship", "Submarine", "Carrier"];
+  const ships = ["Destroyer", "Battleship", "Submarine", "Carrier", "Carrier"];
 
   for (let i = 0; i < ships.length; i++) {
     const shipName = ships[i];
@@ -116,8 +135,8 @@ const generateRandomShips = (playerBoard) => {
   }
 };
 
-typeWriter(start, 'Start');
+typeWriter(start, "Start");
 
 start.addEventListener("click", game);
 
-export { start, typeWriter, generateRandomShips, triggerGlitch, generateBoard, hideBoard }
+export { start, typeWriter, generateRandomShips, triggerGlitch, generateBoard };
