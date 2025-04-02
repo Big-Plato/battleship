@@ -12,8 +12,9 @@ class Player {
 }
 
 class Real extends Player {
-  constructor() {
+  constructor(name = "Human") {
     super();
+    this.name = name;
   }
 }
 
