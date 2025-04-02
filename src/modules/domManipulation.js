@@ -54,16 +54,6 @@ const generateBoard = (player, board) => {
       hidden.dataset.y = j;
       hidden.setAttribute("id", `${player.id}-h${[i] + [j]}`);
 
-    //   hidden.addEventListener("click", () => {
-    //     if (hidden.classList.contains("ship")) {
-    //       hidden.classList.add("revealed");
-    //       hidden.classList.add("hit");
-    //       board.receiveAttack(i, j);
-    //     } else {
-    //       board.receiveAttack(i, j);
-    //     }
-    //   });
-
       container.append(hidden);
       container.append(cell);
       player.append(container);
