@@ -10,25 +10,49 @@ export class Gameboard {
 
   setShip(name, x, y, direction) {
     checkError(x, y);
+    console.log(`Placing ${name} at ${x},${y} (${direction})`);
     const ship = new Ship(name, x, y, direction);
     const moves = checkCoord(this.board, ship);
     ship.moves = moves;
     this.ships.push(ship);
   }
 
+  printShips() {
+    this.ships.forEach(ship => {
+      console.log(`${ship.name} positions:`, ship.moves);
+    });
+  }
+
   receiveAttack(x, y) {
     checkError(x, y);
-    this.board[x][y] = this.board[x][y] === 0 ? "X" : "A";
-    this.gameOver();
+
+    if (this.board[x][y] === "X" || this.board[x][y] === "A") {
+      throw new Error(`Cell ${x},${y} already attacked!`);
+    }
+
+    if (this.board[x][y] === 'S') {
+      this.board[x][y] = 'A';
+      const hitShip = this.ships.find(ship => ship.moves.some(([cx, cy]) => cx === x && cy === y));
+
+      if (!hitShip) {
+        console.error("Ship not found at attacked position!");
+        return { hit: false, sunk: false };
+      }
+
+      hitShip.hit();
+      return { 
+        hit: true, 
+        sunk: hitShip.isSunk(),
+        ship: hitShip 
+      };
+    } else {
+      this.board[x][y] = 'X';
+      return { hit: false, sunk: false };
+    }
   }
 
   gameOver() {
-    let endGame = false;
-    const lookUp = this.board.filter((x) => x.includes("S"));
-    if (lookUp.length === 0) {
-      endGame = true;
-      return endGame;
-    }
+    return this.ships.every(ship => ship.isSunk());
   }
 
   eraseBoard() {

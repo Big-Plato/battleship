@@ -8,6 +8,8 @@ export default class Ship {
       case "Destroyer":
         return (this.length = 3);
       case "Submarine":
+        return (this.length = 3);
+      case "Patrol":
         return (this.length = 2);
     }
   }

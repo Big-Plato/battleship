@@ -16,6 +16,8 @@ const shipColor = (ship, cell) => {
     case "Submarine":
       cell.classList.add("ship");
       break;
+    case "Patrol":
+      cell.classList.add("ship");
   }
 };
 
@@ -70,12 +72,14 @@ const typeWriter = (element, text, speed = 50) => {
   element.innerHTML = "";
   const timer = setInterval(() => {
     if (i < text.length) {
-      element.innerHTML += text.charAt(i);
+      element.textContent += text.charAt(i);
       i++;
     } else {
       clearInterval(timer);
     }
   }, speed);
+
+  return () => clearInterval(timer);
 };
 
 const triggerGlitch = (pBoard) => {

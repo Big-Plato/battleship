@@ -6,6 +6,7 @@ import {
   generateRandomShips,
   triggerGlitch,
 } from "./domManipulation.js";
+import { setGameInstance } from "./gameState.js";
 
 const ctrlDiv = document.querySelector(".ctrl-btn");
 const info = document.querySelector("#info");
@@ -24,6 +25,9 @@ export const game = () => {
 
   generateRandomShips(player1Board);
   generateRandomShips(player2Board);
+
+  player1Board.printShips();
+player2Board.printShips();
 
   generateBoard(p1Board, player1Board);
   generateBoard(p2Board, player2Board);
@@ -66,42 +70,87 @@ export const game = () => {
     ships: player2.board.ships,
   };
 
+  setGameInstance({
+    receiveAttack(x, y, opponent) {
+      const board = opponent === 'human' ? player2Board : player1Board;
+      return board.receiveAttack(x, y);
+    }
+  });
+
   const buttonsPlayer2 = handleBtns("p2-board");
 
   // The game really starts here
   const gameFlow = () => {
-    const switchTurns = (current) => {
-      if (current === playerOne.name) {
-        current = playerTwo.name;
-      } else {
-        current = playerOne.name;
+    const checkGameOver = () => {
+      if (player1.board.gameOver()) {
+        typeWriter(info, "Player 2 Wins!");
+        disableBoard();
+        return true;
       }
-      console.log(current);
-      return current;
+
+      if (player2.board.gameOver()) {
+        typeWriter(info, "Player 1 Wins!");
+        disableBoard();
+        return true;
+      }
+      return false;
+    }
+
+    const disableBoard = () => {
+      const boards = document.querySelectorAll(".board");
+      boards.forEach(board => {
+        board.classList.add("disabled-board");
+      });
+      document.querySelectorAll(".hidden").forEach(btn => {
+        btn.style.pointerEvents = "none";
+      });
     };
 
-    let current = playerOne.name;
+    let currentPlayer = 'human';
 
-    buttonsPlayer2.forEach((e) => {
-      e.addEventListener("click", () => {
-        let play = playerBtns(e, player2Board);
-        console.log(play);
-        typeWriter(info, `${current}'s turn`);
+    const handleHumanTurn = (e) => {
+      if (currentPlayer !== 'human') return;
+      if (checkGameOver()) return;
 
-        while (play === "Play again") {
-          play = playerBtns(e, player2Board);
+      const result = playerBtns(e, player2Board);
+      typeWriter(info, `${playerOne.name}'s turn`);
+
+      if (result === "Miss") {
+        currentPlayer = 'computer';
+        setTimeout(handleComputerTurn, 1000);
+      }
+    };
+
+    const handleComputerTurn = () => {
+      if (currentPlayer !== 'computer') return;
+      if (checkGameOver()) return;
+
+      let result;
+      let consecutiveHits = 0;
+      const maxConsecutiveAttempts = 100;
+
+      do {
+        result = computerPlay(player1Board);
+        typeWriter(info, `${playerTwo.name}'s turn`);
+
+        if (result === "Play Again") {
+          consecutiveHits++;
+          if (consecutiveHits >= maxConsecutiveAttempts) {
+            console.error("Max consecutive hits reached");
+            break;
+          }
         }
+      } while (result === "Play Again" && !checkGameOver());
 
-        switchTurns(current);
-        typeWriter(info, `${current}'s turn`);
-        let compPlay = computerPlay(player1Board);
+      currentPlayer = 'human';
+    };
 
-        while (compPlay === "Play Again") {
-          compPlay = computerPlay(player1Board);
-        }
-      });
+    document.getElementById('p2-board').addEventListener("click", (event) => {
+      const cell = event.target.closest(".hidden");
+      if (cell) handleHumanTurn(cell);
     });
-    console.log(current);
+
+    typeWriter(info, `${playerOne.name}'s turn`);
   };
 };
 
@@ -124,34 +173,40 @@ const handleBtns = (board) => {
 };
 
 const computerPlay = (player1Board) => {
-  const x = Math.floor(Math.random() * 10);
-  const y = Math.floor(Math.random() * 10);
+  let x, y, result;
+  let attempts = 0;
+  const maxAttempts = 100;
 
-  const play = document.querySelector(`#p1-board-${x}${y}`);
-  console.log(play);
+  do {
+    x = Math.floor(Math.random() * 10);
+    y = Math.floor(Math.random() * 10);
+    const cell = document.querySelector(`#p1-board-${x}${y}`);
 
-  if (play.classList.contains("ship")) {
-    play.classList.add("revealed");
-    play.classList.add("hit");
-    player1Board.receiveAttack(x, y);
-    return "Play Again";
-  } else {
-    player1Board.receiveAttack(x, y);
-    play.classList.add("revealed");
-    play.classList.add("miss");
-  }
+    if (!cell.classList.contains("revealed")) {
+      try {
+        result = player1Board.receiveAttack(x, y);
+        cell.classList.add("revealed");
+        cell.classList.add(result.hit ? "hit" : "miss");
+        return result.hit ? "Play Again" : "Miss";
+      } catch (error) {
+        console.log("Invalid attack, trying again...");
+      }
+    }
+    attempts++;
+  } while (attempts < maxAttempts);
+
+  console.error("Failed to find valid attack after", maxAttempts, "attempts");
+  return "Miss";
 };
 
-const playerBtns = (e, board) => {
-  if (e.classList.contains("ship")) {
-    e.classList.add("revealed");
-    e.classList.add("hit");
-    board.receiveAttack(e.dataset.x, e.dataset.y);
-    return "Play Again";
-  } else {
-    board.receiveAttack(e.dataset.x, e.dataset.y);
-    e.classList.add("revealed");
-    e.classList.add("miss");
-    return "Someone else's turn";
-  }
+const playerBtns = (cell, board) => {
+ const x = parseInt(cell.dataset.x);
+ const y = parseInt(cell.dataset.y);
+ const result = board.receiveAttack(x, y);
+
+ cell.classList.add("revealed");
+ cell.classList.add(result.hit ? "hit" : "miss");
+
+ return result.hit ? "Play Again" : "Miss";
+  
 };

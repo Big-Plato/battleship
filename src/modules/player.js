@@ -19,9 +19,21 @@ class Real extends Player {
 }
 
 class Computer extends Player {
-  constructor(name = "Computer") {
-    super();
-    this.name = name;
+  constructor() {
+    super('Computer');
+    this.attacks = new Set();
+  }
+
+  randomAttack() {
+    let x, y, key;
+    do {
+      x = Math.floor(Math.random() * 10);
+      y = Math.floor(Math.random() * 10);
+      key = `${x},${y}`;
+    } while (this.attacks.has(key));
+
+    this.attacks.add(key);
+    return { x, y };
   }
 }
 
