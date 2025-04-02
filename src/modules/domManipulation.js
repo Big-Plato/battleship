@@ -1,4 +1,4 @@
-import { game, handleBtnClick } from "./game.js";
+import { game } from "./game.js";
 
 const start = document.querySelector("#start-btn");
 
@@ -54,15 +54,15 @@ const generateBoard = (player, board) => {
       hidden.dataset.y = j;
       hidden.setAttribute("id", `${player.id}-h${[i] + [j]}`);
 
-      hidden.addEventListener("click", () => {
-        if (hidden.classList.contains("ship")) {
-          hidden.classList.add("revealed");
-          hidden.classList.add("hit");
-          board.receiveAttack(i, j);
-        } else {
-          board.receiveAttack(i, j);
-        }
-      });
+    //   hidden.addEventListener("click", () => {
+    //     if (hidden.classList.contains("ship")) {
+    //       hidden.classList.add("revealed");
+    //       hidden.classList.add("hit");
+    //       board.receiveAttack(i, j);
+    //     } else {
+    //       board.receiveAttack(i, j);
+    //     }
+    //   });
 
       container.append(hidden);
       container.append(cell);
@@ -110,7 +110,7 @@ const generateRandomShips = (playerBoard) => {
     const shipName = ships[i];
     let placed = false;
     let attempts = 0;
-    const maxAttempts = 100;
+    const maxAttempts = 1000;
 
     const direction = i % 2 === 0 ? "Horizontal" : "Vertical";
 
