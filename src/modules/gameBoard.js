@@ -20,8 +20,6 @@ export class Gameboard {
     checkError(x, y);
     this.board[x][y] = this.board[x][y] === 0 ? "X" : "A";
     this.gameOver();
-    console.table(this.board);
-    console.table(this.ships);
   }
 
   gameOver() {
