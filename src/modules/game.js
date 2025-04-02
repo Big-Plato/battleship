@@ -27,7 +27,7 @@ export const game = () => {
   generateRandomShips(player2Board);
 
   player1Board.printShips();
-player2Board.printShips();
+  player2Board.printShips();
 
   generateBoard(p1Board, player1Board);
   generateBoard(p2Board, player2Board);
@@ -72,9 +72,9 @@ player2Board.printShips();
 
   setGameInstance({
     receiveAttack(x, y, opponent) {
-      const board = opponent === 'human' ? player2Board : player1Board;
+      const board = opponent === "human" ? player2Board : player1Board;
       return board.receiveAttack(x, y);
-    }
+    },
   });
 
   const buttonsPlayer2 = handleBtns("p2-board");
@@ -94,35 +94,35 @@ player2Board.printShips();
         return true;
       }
       return false;
-    }
+    };
 
     const disableBoard = () => {
       const boards = document.querySelectorAll(".board");
-      boards.forEach(board => {
+      boards.forEach((board) => {
         board.classList.add("disabled-board");
       });
-      document.querySelectorAll(".hidden").forEach(btn => {
+      document.querySelectorAll(".hidden").forEach((btn) => {
         btn.style.pointerEvents = "none";
       });
     };
 
-    let currentPlayer = 'human';
+    let currentPlayer = "human";
 
     const handleHumanTurn = (e) => {
-      if (currentPlayer !== 'human') return;
+      if (currentPlayer !== "human") return;
       if (checkGameOver()) return;
 
       const result = playerBtns(e, player2Board);
       typeWriter(info, `${playerOne.name}'s turn`);
 
       if (result === "Miss") {
-        currentPlayer = 'computer';
+        currentPlayer = "computer";
         setTimeout(handleComputerTurn, 1000);
       }
     };
 
     const handleComputerTurn = () => {
-      if (currentPlayer !== 'computer') return;
+      if (currentPlayer !== "computer") return;
       if (checkGameOver()) return;
 
       let result;
@@ -142,10 +142,10 @@ player2Board.printShips();
         }
       } while (result === "Play Again" && !checkGameOver());
 
-      currentPlayer = 'human';
+      currentPlayer = "human";
     };
 
-    document.getElementById('p2-board').addEventListener("click", (event) => {
+    document.getElementById("p2-board").addEventListener("click", (event) => {
       const cell = event.target.closest(".hidden");
       if (cell) handleHumanTurn(cell);
     });
@@ -200,13 +200,12 @@ const computerPlay = (player1Board) => {
 };
 
 const playerBtns = (cell, board) => {
- const x = parseInt(cell.dataset.x);
- const y = parseInt(cell.dataset.y);
- const result = board.receiveAttack(x, y);
+  const x = parseInt(cell.dataset.x);
+  const y = parseInt(cell.dataset.y);
+  const result = board.receiveAttack(x, y);
 
- cell.classList.add("revealed");
- cell.classList.add(result.hit ? "hit" : "miss");
+  cell.classList.add("revealed");
+  cell.classList.add(result.hit ? "hit" : "miss");
 
- return result.hit ? "Play Again" : "Miss";
-  
+  return result.hit ? "Play Again" : "Miss";
 };

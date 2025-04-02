@@ -20,7 +20,7 @@ class Real extends Player {
 
 class Computer extends Player {
   constructor() {
-    super('Computer');
+    super("Computer");
     this.attacks = new Set();
   }
 
