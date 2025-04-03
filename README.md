@@ -31,6 +31,7 @@ Available online at: [GitHub Pages Link](http://demiurgos.me/battleship/) <!-- A
 ```bash
 git clone https://github.com/Big-Plato/battleship.git
 ```
+
 2. Install dependencies:
 
 ```bash
@@ -45,7 +46,7 @@ npm start
 
 4. Open in browser:
 
-```
+```bash
 http://localhost:8080
 ```
 
